@@ -3,17 +3,12 @@
 # Copyright 2010 Vivek Sekhar
 #
 
-__author__ = "Vivek Sekhar"
-__email__ = "vivek@xmain.com"
-__copyright__= "Copyright (c) 2010, Vivek Sekhar"
-__license__ = "GPL v3 or later"
-__url__ = "http://vgphub.appspot.com"
-
 import os
 import sys
 import logging
 
 from google.appengine.ext import webapp
+from google.appengine.api import users
 
 import credentials
 
@@ -25,11 +20,18 @@ conn = S3Connection(credentials.access_key, credentials.secret_key)
 bucket = conn.get_bucket("cloudtv")
 
 class MainPage(webapp.RequestHandler):
-    def get(self):
-        self.response.headers['Content-Type'] = 'text/plain'
-        self.response.out.write('Hello, webapp World!')
-    	for key in bucket.list():
-    		self.response.out.write(key.name)
-    		self.response.out.write(' ')
+	def get(self):
+		user = users.get_current_user()
+		if user:
+			self.response.headers['Content-Type'] = 'text/plain'
+			self.response.out.write('Hello, %s!' % user.nickname())
+
+			for key in bucket.list():
+				self.response.out.write(key.name)
+				self.response.out.write(' ')
+
+		else:
+			self.redirect(users.create_login_url(self.request.uri))
+
 
 
