@@ -17,7 +17,7 @@ sys.path = [ os.path.join(os.path.dirname(__file__), "lib", "boto") ] + sys.path
 from boto.s3.connection import S3Connection
 
 conn = S3Connection(credentials.access_key, credentials.secret_key)
-bucket = conn.get_bucket("cloudtv")
+bucket = conn.get_bucket(credentials.bucket)
 
 class MainPage(webapp.RequestHandler):
 	def get(self):
