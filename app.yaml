@@ -1,0 +1,24 @@
+application: vgphub
+version: 1
+runtime: python
+api_version: 1
+
+handlers:
+  
+- url: /test.*
+  script: test.py
+
+- url: /public
+  static_dir: public/
+
+#- url: /favicon.ico
+#  static_files: public/favicon.ico
+#  upload: public/favicon.ico
+  
+- url: /crossdomain.xml
+  static_files: public/crossdomain.xml
+  upload: public/crossdomain.xml
+
+- url: /.*
+  script: main.py
+
